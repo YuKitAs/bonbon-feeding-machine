@@ -16,7 +16,7 @@ PATH = config['photo']['Path']
 
 
 def start(bot, update):
-    update.message.reply_text("Hello Bonbon master! Enter /takephoto to check how Bonbon is doing. :hamster:")
+    update.message.reply_text("Hello Bonbon master! Enter /takephoto to check how Bonbon is doing.")
 
 
 def capture_image(bot, update):
