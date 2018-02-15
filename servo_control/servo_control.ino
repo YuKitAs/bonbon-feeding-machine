@@ -3,7 +3,7 @@
 const int UART_BPS = 9600;
 
 const int SERVO_PORT_NUM = 9;
-const int SERVO_NEUTRAL_POINT = 95;
+const int SERVO_NEUTRAL_POINT = 94;
 const int SERVO_MOVING_POINT = 97;
 const int SERVO_STEP_TIME_MS = 550;
 
