@@ -3,6 +3,7 @@ import logging
 import configparser
 import time
 import cv2
+import servo
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
                     level=logging.INFO)
@@ -16,7 +17,9 @@ PATH = config['photo']['Path']
 
 
 def start(bot, update):
-    update.message.reply_text("Hello Bonbon master! Enter /takephoto to check how Bonbon is doing.")
+    update.message.reply_text(
+        "Hello Bonbon master! Enter /takephoto to check how Bonbon is doing." +
+        " Enter /controlservo to rotate the feeding machine.")
 
 
 def capture_image(bot, update):
@@ -31,6 +34,10 @@ def capture_image(bot, update):
     cv2.destroyAllWindows()
 
     bot.send_photo(chat_id=update.message.chat_id, photo=open(image, "rb"))
+
+
+def control_servo(bot, update):
+    servo.send_servo_signal()
 
 
 def auto_reply(bot, update):
@@ -48,6 +55,7 @@ def main():
 
     dispatcher.add_handler(CommandHandler("start", start))
     dispatcher.add_handler(CommandHandler("takephoto", capture_image))
+    dispatcher.add_handler(CommandHandler("controlservo", control_servo))
 
     dispatcher.add_handler(MessageHandler(Filters.text, auto_reply))
 
