@@ -1,3 +1,4 @@
 env/
 .idea/
 configuration.txt
+__pycache__
