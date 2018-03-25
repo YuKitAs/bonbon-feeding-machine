@@ -10,7 +10,8 @@
 
 ### v2.0
 
-- [ ] Add an option for recording and sending video
+- [X] Record video and save to disk
+- [ ] Add an option for sending video
 - [ ] Adjust image brightness
 - [ ] Non-continous servo
 - [ ] Better UART communication
