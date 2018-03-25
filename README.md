@@ -11,6 +11,7 @@
 ### v2.0
 
 - [ ] Motion detection
+- [ ] Adjust image brightness
 - [ ] Non-continous servo
 - [ ] Better UART communication
 - [ ] Better constuction
