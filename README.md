@@ -10,7 +10,7 @@
 
 ### v2.0
 
-- [ ] Motion detection
+- [ ] Add an option for recording and sending video
 - [ ] Adjust image brightness
 - [ ] Non-continous servo
 - [ ] Better UART communication
