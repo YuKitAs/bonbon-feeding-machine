@@ -11,7 +11,8 @@
 ### v2.0
 
 - [X] Record video and save to disk
-- [ ] Add an option for sending video
+- [X] Add an option for sending video
+- [ ] Add credentials for telegram bot
 - [ ] Adjust image brightness
 - [ ] Non-continous servo
 - [ ] Better UART communication
