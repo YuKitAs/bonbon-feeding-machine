@@ -20,11 +20,13 @@ VIDEO, SERVO = range(2)
 
 
 def start(_bot, update):
-    update.message.reply_text(
-        "Hello Bonbon master! What do you want to do?\n"
-        + emojize("1. /takephoto :camera:\n")
-        + emojize("2. /recordvideo :video_camera:\n")
-        + emojize("3. /controlservo :lollipop:"), reply_markup=ReplyKeyboardRemove())
+    update.message.reply_text(emojize(
+        """
+Hello Bonbon master! What do you want to do?
+1. /takephoto :camera:
+2. /recordvideo :video_camera:
+3. /controlservo :lollipop:
+        """.strip()), reply_markup=ReplyKeyboardRemove())
 
 
 def take_photo(bot, update):
@@ -33,7 +35,7 @@ def take_photo(bot, update):
     bot.send_photo(chat_id=update.message.chat_id, photo=open(image, "rb"))
 
 
-def set_length(_bot, update):
+def set_video_length(_bot, update):
     update.message.reply_text("How long should the video be? Please enter a number of seconds (MAX = 30). \n/cancel",
                               reply_markup=ReplyKeyboardRemove())
 
@@ -42,7 +44,7 @@ def set_length(_bot, update):
 
 def record_video(bot, update):
     length = update.message.text
-    if 0 < int(length) <= 30:
+    if length.isdigit() and (int(length) in range(1, 31)):
         update.message.reply_text("Recording video... Please wait a minute.")
         video = webcam.capture_video(PATH, int(length))
         bot.send_document(chat_id=update.message.chat_id, document=open(video, "rb"), timeout=1000)
@@ -82,7 +84,7 @@ def cancel_conv(_bot, update):
 
 
 def auto_reply(_bot, update):
-    update.message.reply_text("Bonbon loves you <3")
+    update.message.reply_text(emojize("Bonbon loves you :yellow_heart:"))
 
 
 def error(_bot, update, error):
@@ -99,7 +101,7 @@ def main():
     dispatcher.add_handler(CommandHandler("takephoto", take_photo))
 
     video_conv_handler = ConversationHandler(
-        entry_points=[CommandHandler('recordvideo', set_length)],
+        entry_points=[CommandHandler('recordvideo', set_video_length)],
 
         states={
             VIDEO: [MessageHandler(Filters.text, record_video)]
