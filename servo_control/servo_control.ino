@@ -1,41 +1,79 @@
 #include <Servo.h>
 
-const int UART_BPS = 9600;
-
-const int SERVO_PORT_NUM = 9;
-const int SERVO_NEUTRAL_POINT = 92;
-const int SERVO_MOVING_POINT = 88;
-const int SERVO_STEP_TIME_MS = 300;
+//////////// SERVO /////////////////////////
 
 Servo servo;
 
-void setup() {
-  initializeServo();
-  initializeUartConnect();
-}
-
-void loop() {
-  if (Serial.available() > 0) {
-    char readChar = Serial.read();
-    if (readChar == 'f') {
-      Serial.println("START");
-      servo.write(SERVO_MOVING_POINT);
-      delay(SERVO_STEP_TIME_MS);
-      servo.write(SERVO_NEUTRAL_POINT);
-      Serial.println("STOP");
+void servo_RotateTo(int angle) {
+  angle = angle > 180 ? 180 : angle;
+  angle = angle < 0 ? 0 : angle;
+  
+  while (servo.read() < angle || servo.read() > angle) {
+    if (servo.read() < angle) {
+      servo.write(servo.read() + 1);
+      delay(50);
     } else {
-      Serial.println("UNKNOWN");
+      servo.write(servo.read() - 1);
+      delay(50);
     }
   }
 }
 
-void initializeServo() {
-  servo.attach(SERVO_PORT_NUM);
+void servo_Feed() {
+  servo_RotateTo(servo.read() + 60);
 }
 
-void initializeUartConnect() {
-  Serial.begin(UART_BPS);
-  // Actively wait for connecting:
+void servo_Forward() {
+  servo_RotateTo(servo.read() + 5);
+}
+
+void servo_Backward() {
+  servo_RotateTo(servo.read() - 5);
+}
+
+void servo_Initialize() {
+  servo.attach(9, 500, 2000);
+  servo.write(0);
+}
+
+//////////// SERIAL ////////////////////////
+
+void serial_Initialize() {
+  Serial.begin(9600);
   while (!Serial) {}
+  Serial.println("READY");
+}
+
+////////////////////////////////////////////
+
+void setup() {
+  serial_Initialize();
+  servo_Initialize();
+}
+
+void loop() {
+  if (Serial.available() > 0) {
+    switch (Serial.read()) {
+      case 'f':
+        Serial.println("FEED");
+        servo_Feed();
+        break;
+      case 'h':
+        Serial.println("ALIVE");
+        break;
+      case 'a':
+        Serial.println("FORWARD");
+        servo_Forward();
+        break;
+      case 'b':
+        Serial.println("BACKWARD");
+        servo_Backward();
+        break;
+      case 'r':
+        Serial.println("RESET");
+        servo_Initialize();
+        break;
+    }
+  }
 }
 
