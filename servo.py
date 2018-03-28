@@ -1,10 +1,10 @@
 import time
-import os
 
+import os
 import serial
 
 
-def isNewCommand(command, last_command_timestamp):
+def is_new_command(command, last_command_timestamp):
     command, timestamp = command.split("_")
     return int(timestamp) > last_command_timestamp
 
@@ -15,33 +15,33 @@ def main():
             time.sleep(1)
         print("connected")
 
-        accumulatedLoops = 0
+        accumulated_loops = 0
         last_command_timestamp = int(time.time())
         while True:
-            accumulatedLoops += 1
+            accumulated_loops += 1
 
-            if accumulatedLoops >= 10:
-                accumulatedLoops = 0
+            if accumulated_loops >= 10:
+                accumulated_loops = 0
 
                 ser.write(b"h")
 
                 if "ALIVE" not in ser.readline().decode("utf-8"):
-                    print("heatbeat-missing")
+                    print("heartbeat missing")
 
             commands = os.listdir("/tmp/bonbon/commands")
-            newCommands = list(filter(lambda command: isNewCommand(command, last_command_timestamp), commands))
+            new_commands = list(filter(lambda command: is_new_command(command, last_command_timestamp), commands))
 
-            if newCommands != []:
+            if new_commands != []:
                 last_command_timestamp = int(time.time())
 
-                for newCommand in newCommands:
-                    if newCommand.startswith("feed"):
+                for new_command in new_commands:
+                    if new_command.startswith("feed"):
                         ser.write(b"f")
-                    elif newCommand.startswith("reset"):
+                    elif new_command.startswith("reset"):
                         ser.write(b"r")
-                    elif newCommand.startswith("forward"):
+                    elif new_command.startswith("forward"):
                         ser.write(b"a")
-                    elif newCommand.startswith("backward"):
+                    elif new_command.startswith("backward"):
                         ser.write(b"b")
                 ser.readline()
                 time.sleep(5)
