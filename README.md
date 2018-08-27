@@ -12,8 +12,9 @@
 
 - [X] Record video and save to disk
 - [X] Add an option for sending video
+- [X] Add an option for viewing logs
 - [ ] Add credentials for telegram bot
 - [ ] Adjust image brightness
 - [ ] Non-continous servo
 - [ ] Better UART communication
-- [ ] Better constuction
+- [ ] Better construction
