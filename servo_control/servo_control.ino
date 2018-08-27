@@ -20,20 +20,20 @@ void servo_RotateTo(int angle) {
 }
 
 void servo_Feed() {
-  servo_RotateTo(servo.read() + 60);
+  servo_RotateTo(servo.read() - 60);
 }
 
 void servo_Forward() {
-  servo_RotateTo(servo.read() + 5);
+  servo_RotateTo(servo.read() - 5);
 }
 
 void servo_Backward() {
-  servo_RotateTo(servo.read() - 5);
+  servo_RotateTo(servo.read() + 5);
 }
 
 void servo_Initialize() {
   servo.attach(9, 500, 2000);
-  servo.write(0);
+  servo.write(180);
 }
 
 //////////// SERIAL ////////////////////////
