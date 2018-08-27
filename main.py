@@ -1,4 +1,6 @@
 import logging
+import subprocess
+import sys
 import time
 from configparser import ConfigParser
 
@@ -10,7 +12,8 @@ from telegram.ext import run_async
 import webcam
 from telegram_bot import TelegramBot
 
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
+logging.basicConfig(stream=sys.stdout, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+                    level=logging.INFO)
 
 config = ConfigParser()
 config.read("configuration.txt")
@@ -23,15 +26,15 @@ TELEGRAM_BOT_SEND_TIMEOUT = int(config["telegram.bot"]["SendTimeout"])
 
 
 @run_async
-def handle_start(bot, update):
+def handle_start(_bot, update):
     update.message.reply_text(emojize(
         """
 Hello Bonbon master! What do you want to do?
 1. /takephoto :camera:
 2. /recordvideo :video_camera:
 3. /feed :lollipop:
-4. /forwardservo
-5. /backwardservo
+4. /forwardservo :fast_forward:
+5. /backwardservo :rewind:
         """.strip()), reply_markup=ReplyKeyboardRemove())
 
 
@@ -65,7 +68,7 @@ def handle_record_video(bot, update):
 
 
 @run_async
-def handle_feed(bot, update):
+def handle_feed(_bot, _update):
     logging.getLogger("handle_feed").info("Rotating feeding machine")
 
     command_file_path = os.path.join('/tmp/bonbon/commands', 'feed_%s' % str(int(time.time())))
@@ -76,7 +79,7 @@ def handle_feed(bot, update):
 
 
 @run_async
-def handle_feed(bot, update):
+def handle_feed(_bot, _update):
     logging.getLogger("handle_feed").info("Rotating feeding machine")
 
     command_file_path = os.path.join('/tmp/bonbon/commands', 'feed_%s' % str(int(time.time())))
@@ -87,7 +90,7 @@ def handle_feed(bot, update):
 
 
 @run_async
-def handle_forward_servo(bot, update):
+def handle_forward_servo(_bot, _update):
     logging.getLogger("handle_forward_servo").info("Rotating servo forwards")
 
     command_file_path = os.path.join('/tmp/bonbon/commands', 'forward_%s' % str(int(time.time())))
@@ -98,7 +101,7 @@ def handle_forward_servo(bot, update):
 
 
 @run_async
-def handle_backward_servo(bot, update):
+def handle_backward_servo(_bot, _update):
     logging.getLogger("handle_backward_servo").info("Rotating servo backwards")
 
     command_file_path = os.path.join('/tmp/bonbon/commands', 'backward_%s' % str(int(time.time())))
@@ -109,7 +112,7 @@ def handle_backward_servo(bot, update):
 
 
 @run_async
-def handle_reset_servo(bot, update):
+def handle_reset_servo(_bot, _update):
     logging.getLogger("handle_reset_servo").info("Resetting servo")
 
     command_file_path = os.path.join('/tmp/bonbon/commands', 'reset_%s' % str(int(time.time())))
@@ -120,19 +123,29 @@ def handle_reset_servo(bot, update):
 
 
 @run_async
-def handle_default_message(bot, update):
+def handle_default_message(_bot, update):
     update.message.reply_text("Bonbon loves you ~")
     time.sleep(5)
     update.message.reply_text(emojize(":yellow_heart:"))
 
 
-def handle_error(bot, update, error):
+def handle_error(_bot, update, error):
     error_message = "An error has occurred: %s" % error
 
     if update:
         update.message.reply_text(error_message)
 
     logging.getLogger("handle_error").error(error_message)
+
+
+@run_async
+def handle_view_log(_bot, update):
+    result = ""
+    result += subprocess.run(['tail', 'servo.log'], stdout=subprocess.PIPE).stdout.decode('utf-8')
+    result += "=================\n"
+    result += subprocess.run(['tail', 'main.log'], stdout=subprocess.PIPE).stdout.decode('utf-8')
+
+    update.message.reply_text(result)
 
 
 def main():
@@ -144,6 +157,7 @@ def main():
         .add_command_handler("forwardservo", handle_forward_servo) \
         .add_command_handler("backwardservo", handle_backward_servo) \
         .add_command_handler("resetservo", handle_reset_servo) \
+        .add_command_handler("viewlog", handle_view_log) \
         .add_default_message_handler(handle_default_message) \
         .add_error_handler(handle_error) \
         .start()
