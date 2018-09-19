@@ -3,3 +3,4 @@ python-crontab>=2.2.8
 configparser>=3.5.0
 python-telegram-bot>=3.4
 pySerial>=3.4
+emoji
