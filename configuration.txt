@@ -1,0 +1,7 @@
+[webcam]
+Path = /tmp/bonbon/
+VideoLength = 15
+
+[telegram.bot]
+Token = <bot-access-token-retrieved-or-revoked-from-bot-father>
+SendTimeout = 20

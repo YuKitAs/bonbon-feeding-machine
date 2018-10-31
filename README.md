@@ -1,5 +1,42 @@
 # bonbon-feeding-machine
 
+## Prerequisites
+
+* Python
+* pip (`sudo apt install python-pip`)
+
+## Usage
+
+1. Create a directory with write permission to store photos and videos (e.g. `/tmp/bonbon`)
+
+2. Create a directory with write permission to store servo commands (e.g. `/tmp/bonbon/commands`)
+
+3. Modify values in `configuration.txt`
+
+4. Install all python modules with
+
+  ```console
+  $ pip install -r requirements.txt
+  ```
+
+5. After connected servo, run `set-device-permission.sh`
+
+6. If in virtualenv, use `run.sh` to start Telegram bot and servo, otherwise
+
+  for Telegram bot:
+
+  ```console
+  $ python main.py >> main.log
+  ```
+
+  for servo:
+
+  ```console
+  $ python servo.py >> servo.log
+  ```
+
+## Worklog
+
 ### v1.0
 
 - [x] Capture image with webcam and save to disk
@@ -15,6 +52,6 @@
 - [X] Add an option for viewing logs
 - [ ] Add credentials for telegram bot
 - [ ] Adjust image brightness
-- [ ] Non-continous servo
+- [ ] Non-continuous servo
 - [ ] Better UART communication
 - [ ] Better construction

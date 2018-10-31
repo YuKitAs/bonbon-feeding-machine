@@ -1,5 +1,4 @@
 env/
 .idea/
-configuration.txt
 __pycache__
 *.log
