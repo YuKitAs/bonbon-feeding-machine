@@ -11,7 +11,17 @@
 
 2. Create a directory with write permission to store servo commands (e.g. `/tmp/bonbon/commands`)
 
-3. Modify values in `configuration.txt`
+3. Create `configuration.txt` in the project root with the following content, modify the bot access token which can be retrieved or revoked from BotFather:
+
+  ```
+  [webcam]
+  Path = /path/to/bonbon/photos/
+  VideoLength = 15
+
+  [telegram.bot]
+  Token = random-bot-access-token
+  SendTimeout = 20
+  ```
 
 4. Install all python modules with
 
