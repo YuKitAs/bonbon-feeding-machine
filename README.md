@@ -2,8 +2,7 @@
 
 ## Prerequisites
 
-* Python
-* pip (`sudo apt install python-pip`)
+* Python Virtualenv (see [note](https://github.com/YuKitAs/tech-note/blob/master/programming-language/python/setup-virtual-environment.md))
 
 ## Usage
 
@@ -11,7 +10,7 @@
 
 2. Create a directory with write permission to store servo commands (e.g. `/tmp/bonbon/commands`)
 
-3. Create `configuration.txt` in the project root with the following content, modify the bot access token which can be retrieved or revoked from BotFather:
+3. Create `configuration.txt` in the project root with content as follows, modify the bot access token which can be retrieved or revoked from BotFather:
 
   ```
   [webcam]
@@ -23,7 +22,7 @@
   SendTimeout = 20
   ```
 
-4. Install all python modules with
+4. Activate virtualenv, install all Python modules with pip (`sudo apt install python-pip`):
 
   ```console
   $ pip install -r requirements.txt
@@ -31,19 +30,9 @@
 
 5. After connected servo, run `set-device-permission.sh`
 
-6. If in virtualenv, use `run.sh` to start Telegram bot and servo, otherwise
+6. Execute `run.sh` to start Telegram bot and servo in the background (remember to check if the processes `main.py` and `servo.py` are already running).
 
-  for Telegram bot:
-
-  ```console
-  $ python main.py >> main.log
-  ```
-
-  for servo:
-
-  ```console
-  $ python servo.py >> servo.log
-  ```
+7. The hidden Telegram bot command `/viewlog` can be used to list recent logs.
 
 ## Worklog
 
