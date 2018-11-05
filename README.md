@@ -30,9 +30,9 @@
 
 5. After connected servo, run `set-device-permission.sh`
 
-6. Execute `run.sh` to start Telegram bot and servo in the background (remember to check if the processes `main.py` and `servo.py` are already running).
+6. Execute `run.sh` to start Telegram bot and servo in the background (remember to check if the processes `main.py` and `servo.py` are already running)
 
-7. The hidden Telegram bot command `/viewlog` can be used to list recent logs.
+7. The hidden Telegram bot command `/viewlog` can be used to list recent logs
 
 ## Worklog
 
