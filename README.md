@@ -57,7 +57,7 @@
 - [X] Record video and save to disk
 - [X] Add an option for sending video
 - [X] Add an option for viewing logs
-- [X] Add credentials for telegram bot
+- [X] Whitelist trusted chat_id for telegram bot
 - [ ] Adjust image brightness
 - [ ] Non-continuous servo
 - [ ] Better UART communication
