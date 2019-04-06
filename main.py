@@ -1,10 +1,11 @@
+import json
 import logging
+import os
 import subprocess
 import sys
 import time
 from configparser import ConfigParser
 
-import os
 from emoji import emojize
 from telegram import ReplyKeyboardRemove
 from telegram.ext import run_async
@@ -22,14 +23,25 @@ WEBCAM_PATH = config["webcam"]["Path"]
 WEBCAM_DEFAULT_VIDEO_LENGTH = int(config["webcam"]["VideoLength"])
 
 TELEGRAM_BOT_TOKEN = config["telegram.bot"]["Token"]
+TELEGRAM_CHAT_ID = json.loads(config.get("telegram.bot", "ChatId"))
 TELEGRAM_BOT_SEND_TIMEOUT = int(config["telegram.bot"]["SendTimeout"])
+
+ERROR_MESSAGE = "You ain't Bonbon Master! " + emojize(":no_entry:")
+
+
+def _valid_user(chat_id):
+    return chat_id in TELEGRAM_CHAT_ID
 
 
 @run_async
 def handle_start(_bot, update):
+    if not _valid_user(update.message.chat_id):
+        update.message.reply_text(ERROR_MESSAGE)
+        return
+
     update.message.reply_text(emojize(
         """
-Hello Bonbon master! What do you want to do?
+Hello Bonbon Master! What do you want to do?
 1. /takephoto :camera:
 2. /recordvideo :video_camera:
 3. /feed :lollipop:
@@ -40,6 +52,10 @@ Hello Bonbon master! What do you want to do?
 
 @run_async
 def handle_take_photo(bot, update):
+    if not _valid_user(update.message.chat_id):
+        update.message.reply_text(ERROR_MESSAGE)
+        return
+
     logging.getLogger("handle_take_photo").info("Taking photo")
 
     image_path = webcam.capture_image(WEBCAM_PATH)
@@ -53,6 +69,10 @@ def handle_take_photo(bot, update):
 
 @run_async
 def handle_record_video(bot, update):
+    if not _valid_user(update.message.chat_id):
+        update.message.reply_text(ERROR_MESSAGE)
+        return
+
     logging.getLogger("handle_record_video").info("Recording video")
 
     update.message.reply_text("Recording video... Please wait a minute.")
@@ -68,7 +88,11 @@ def handle_record_video(bot, update):
 
 
 @run_async
-def handle_feed(_bot, _update):
+def handle_feed(_bot, update):
+    if not _valid_user(update.message.chat_id):
+        update.message.reply_text(ERROR_MESSAGE)
+        return
+
     logging.getLogger("handle_feed").info("Rotating feeding machine")
 
     command_file_path = os.path.join('/tmp/bonbon/commands', 'feed_%s' % str(int(time.time())))
@@ -79,7 +103,11 @@ def handle_feed(_bot, _update):
 
 
 @run_async
-def handle_forward_servo(_bot, _update):
+def handle_forward_servo(_bot, update):
+    if not _valid_user(update.message.chat_id):
+        update.message.reply_text(ERROR_MESSAGE)
+        return
+
     logging.getLogger("handle_forward_servo").info("Rotating servo forwards")
 
     command_file_path = os.path.join('/tmp/bonbon/commands', 'forward_%s' % str(int(time.time())))
@@ -90,7 +118,11 @@ def handle_forward_servo(_bot, _update):
 
 
 @run_async
-def handle_backward_servo(_bot, _update):
+def handle_backward_servo(_bot, update):
+    if not _valid_user(update.message.chat_id):
+        update.message.reply_text(ERROR_MESSAGE)
+        return
+
     logging.getLogger("handle_backward_servo").info("Rotating servo backwards")
 
     command_file_path = os.path.join('/tmp/bonbon/commands', 'backward_%s' % str(int(time.time())))
@@ -101,7 +133,11 @@ def handle_backward_servo(_bot, _update):
 
 
 @run_async
-def handle_reset_servo(_bot, _update):
+def handle_reset_servo(_bot, update):
+    if not _valid_user(update.message.chat_id):
+        update.message.reply_text(ERROR_MESSAGE)
+        return
+
     logging.getLogger("handle_reset_servo").info("Resetting servo")
 
     command_file_path = os.path.join('/tmp/bonbon/commands', 'reset_%s' % str(int(time.time())))
@@ -113,9 +149,14 @@ def handle_reset_servo(_bot, _update):
 
 @run_async
 def handle_default_message(_bot, update):
-    update.message.reply_text("Bonbon loves you ~")
-    time.sleep(5)
-    update.message.reply_text(emojize(":yellow_heart:"))
+    if not _valid_user(update.message.chat_id):
+        update.message.reply_text(ERROR_MESSAGE)
+        return
+
+    update.message.reply_text("Bonbon loves you " + emojize(":yellow_heart:"))
+
+    logging.getLogger("handle_default_message").info(
+        "Received message from {}: {}".format(update.message.chat_id, update.message.text))
 
 
 def handle_error(_bot, update, error):
@@ -129,6 +170,10 @@ def handle_error(_bot, update, error):
 
 @run_async
 def handle_view_log(_bot, update):
+    if not _valid_user(update.message.chat_id):
+        update.message.reply_text(ERROR_MESSAGE)
+        return
+
     result = ""
     result += subprocess.run(['tail', 'servo.log'], stdout=subprocess.PIPE).stdout.decode('utf-8')
     result += "=================\n"
