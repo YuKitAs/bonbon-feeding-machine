@@ -95,7 +95,7 @@ def handle_feed(_bot, update):
 
     logging.getLogger("handle_feed").info("Rotating feeding machine")
 
-    command_file_path = os.path.join('/tmp/bonbon/commands', 'feed_{}'.format(str(int(time.time()))))
+    command_file_path = os.path.join(WEBCAM_PATH, 'commands', 'feed_{}'.format(str(int(time.time()))))
     with open(command_file_path, 'a'):
         pass
 
@@ -110,7 +110,7 @@ def handle_forward_servo(_bot, update):
 
     logging.getLogger("handle_forward_servo").info("Rotating servo forwards")
 
-    command_file_path = os.path.join('/tmp/bonbon/commands', 'forward_{}'.format(str(int(time.time()))))
+    command_file_path = os.path.join(WEBCAM_PATH, 'commands', 'forward_{}'.format(str(int(time.time()))))
     with open(command_file_path, 'a'):
         pass
 
@@ -125,7 +125,7 @@ def handle_backward_servo(_bot, update):
 
     logging.getLogger("handle_backward_servo").info("Rotating servo backwards")
 
-    command_file_path = os.path.join('/tmp/bonbon/commands', 'backward_{}'.format(str(int(time.time()))))
+    command_file_path = os.path.join(WEBCAM_PATH, 'commands', 'backward_{}'.format(str(int(time.time()))))
     with open(command_file_path, 'a'):
         pass
 
@@ -140,7 +140,7 @@ def handle_reset_servo(_bot, update):
 
     logging.getLogger("handle_reset_servo").info("Resetting servo")
 
-    command_file_path = os.path.join('/tmp/bonbon/commands', 'reset_{}'.format(str(int(time.time()))))
+    command_file_path = os.path.join(WEBCAM_PATH, 'commands', 'reset_{}'.format(str(int(time.time()))))
     with open(command_file_path, 'a'):
         pass
 
