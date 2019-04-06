@@ -26,7 +26,7 @@ TELEGRAM_BOT_TOKEN = config["telegram.bot"]["Token"]
 TELEGRAM_CHAT_ID = json.loads(config.get("telegram.bot", "ChatId"))
 TELEGRAM_BOT_SEND_TIMEOUT = int(config["telegram.bot"]["SendTimeout"])
 
-ERROR_MESSAGE = "You ain't Bonbon Master! " + emojize(":no_entry:")
+ERROR_MESSAGE = "You ain't Bonbon Master! {}".format(emojize(":no_entry:"))
 
 
 def _valid_user(chat_id):
@@ -60,7 +60,7 @@ def handle_take_photo(bot, update):
 
     image_path = webcam.capture_image(WEBCAM_PATH)
 
-    logging.getLogger("handle_take_photo").info("Sending photo stored at '%s'" % image_path)
+    logging.getLogger("handle_take_photo").info("Sending photo stored at '{}'".format(image_path))
 
     bot.send_photo(chat_id=update.message.chat_id, photo=open(image_path, "rb"), timeout=TELEGRAM_BOT_SEND_TIMEOUT)
 
@@ -79,7 +79,7 @@ def handle_record_video(bot, update):
 
     video_path = webcam.capture_video(WEBCAM_PATH, WEBCAM_DEFAULT_VIDEO_LENGTH)
 
-    logging.getLogger("handle_record_video").info("Sending video stored at '%s'" % video_path)
+    logging.getLogger("handle_record_video").info("Sending video stored at '{}'".format(video_path))
 
     bot.send_document(chat_id=update.message.chat_id, document=open(video_path, "rb"),
                       timeout=TELEGRAM_BOT_SEND_TIMEOUT)
@@ -95,11 +95,11 @@ def handle_feed(_bot, update):
 
     logging.getLogger("handle_feed").info("Rotating feeding machine")
 
-    command_file_path = os.path.join('/tmp/bonbon/commands', 'feed_%s' % str(int(time.time())))
+    command_file_path = os.path.join('/tmp/bonbon/commands', 'feed_{}'.format(str(int(time.time()))))
     with open(command_file_path, 'a'):
         pass
 
-    logging.getLogger("handle_feed").info("Command file wrote: %s" % command_file_path)
+    logging.getLogger("handle_feed").info("Command file wrote: {}".format(command_file_path))
 
 
 @run_async
@@ -110,11 +110,11 @@ def handle_forward_servo(_bot, update):
 
     logging.getLogger("handle_forward_servo").info("Rotating servo forwards")
 
-    command_file_path = os.path.join('/tmp/bonbon/commands', 'forward_%s' % str(int(time.time())))
+    command_file_path = os.path.join('/tmp/bonbon/commands', 'forward_{}'.format(str(int(time.time()))))
     with open(command_file_path, 'a'):
         pass
 
-    logging.getLogger("handle_forward_servo").info("Command file wrote: %s" % command_file_path)
+    logging.getLogger("handle_forward_servo").info("Command file wrote: {}".format(command_file_path))
 
 
 @run_async
@@ -125,11 +125,11 @@ def handle_backward_servo(_bot, update):
 
     logging.getLogger("handle_backward_servo").info("Rotating servo backwards")
 
-    command_file_path = os.path.join('/tmp/bonbon/commands', 'backward_%s' % str(int(time.time())))
+    command_file_path = os.path.join('/tmp/bonbon/commands', 'backward_{}'.format(str(int(time.time()))))
     with open(command_file_path, 'a'):
         pass
 
-    logging.getLogger("handle_backward_servo").info("Command file wrote: %s" % command_file_path)
+    logging.getLogger("handle_backward_servo").info("Command file wrote: {}".format(command_file_path))
 
 
 @run_async
@@ -140,11 +140,11 @@ def handle_reset_servo(_bot, update):
 
     logging.getLogger("handle_reset_servo").info("Resetting servo")
 
-    command_file_path = os.path.join('/tmp/bonbon/commands', 'reset_%s' % str(int(time.time())))
+    command_file_path = os.path.join('/tmp/bonbon/commands', 'reset_{}'.format(str(int(time.time()))))
     with open(command_file_path, 'a'):
         pass
 
-    logging.getLogger("handle_reset_servo").info("Command file wrote: %s" % command_file_path)
+    logging.getLogger("handle_reset_servo").info("Command file wrote: {}".format(command_file_path))
 
 
 @run_async
@@ -153,14 +153,14 @@ def handle_default_message(_bot, update):
         update.message.reply_text(ERROR_MESSAGE)
         return
 
-    update.message.reply_text("Bonbon loves you " + emojize(":yellow_heart:"))
+    update.message.reply_text("Bonbon loves you {}".format(emojize(":yellow_heart:")))
 
     logging.getLogger("handle_default_message").info(
         "Received message from {}: {}".format(update.message.chat_id, update.message.text))
 
 
 def handle_error(_bot, update, error):
-    error_message = "An error has occurred: %s" % error
+    error_message = "An error has occurred: {}".format(error)
 
     if update:
         update.message.reply_text(error_message)
