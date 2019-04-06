@@ -79,17 +79,6 @@ def handle_feed(_bot, _update):
 
 
 @run_async
-def handle_feed(_bot, _update):
-    logging.getLogger("handle_feed").info("Rotating feeding machine")
-
-    command_file_path = os.path.join('/tmp/bonbon/commands', 'feed_%s' % str(int(time.time())))
-    with open(command_file_path, 'a'):
-        pass
-
-    logging.getLogger("handle_feed").info("Command file wrote: %s" % command_file_path)
-
-
-@run_async
 def handle_forward_servo(_bot, _update):
     logging.getLogger("handle_forward_servo").info("Rotating servo forwards")
 
